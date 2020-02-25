@@ -32,9 +32,9 @@ def img(row, data):
 	plt.imshow(image, cmap = 'gray')
 	plt.show()
             
-def calculate_accuracy():
-    global accuracy, y_test
-    return (accuracy/y_test.shape[0])
+def calculate_accuracy(y):
+    global accuracy
+    return (accuracy/y.shape[0])
     
 def calculate_wx(x):
     global w, wx
@@ -42,13 +42,15 @@ def calculate_wx(x):
         wx[i] = (np.dot(x, w[i]))
     return np.argmax(wx)
     
-def test_perceptron():
-    global w, x_test, y_test, wx, y_predicted, accuracy
+def test_perceptron(x, y):
+    global w, wx, y_predicted, accuracy
     for i in range(len(x_test)):
-        y_predicted = calculate_wx(x_test[i])
-        y_actual    = int(y_test[i])
+        y_predicted = calculate_wx(x[i])
+        y_actual    = int(y[i])
         if (y_predicted == y_actual):
             accuracy = accuracy + 1
+    print("Accuracy is: ", calculate_accuracy(y))
+    accuracy = 0
 
 def perceptron():
     global w, x_train, y_train, wx, y_predicted
@@ -61,7 +63,7 @@ def perceptron():
             w[y_predicted] = w[y_predicted] - x_train[i] 
             w[y_actual]    = w[y_actual]    + x_train[i]
 
-def pre_perceptron():
+def init():
     global w, x_train, wx, no_of_different_labels, x_test
     x_train = np.append(x_train, np.ones([len(x_train),1]),1)
     x_test  = np.append(x_test, np.ones([len(x_test),1]),1)
@@ -79,14 +81,21 @@ def load_mnist(data_path = "./"):
 # -----------------------------------------------------------------------------
 # DRIVER
     
-def main(): 
+def main():
+    global y_test, y_train
     load_mnist()
-    pre_perceptron()
+    init()
     perceptron()
-    test_perceptron()
-    print("Accuracy is: ", calculate_accuracy())
+    test_perceptron(x_train, y_train)
+    test_perceptron(x_test, y_test)
 
 if __name__ == "__main__":
     main()
 
+# -----------------------------------------------------------------------------
+# OUTPUT:     
+
+# Accuracy is:  0.8242
+# Accuracy is:  0.8114
+    
 # -----------------------------------------------------------------------------
