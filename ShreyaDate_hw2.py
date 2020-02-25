@@ -9,7 +9,7 @@
 
 import numpy as np
 from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt 
 
 # -----------------------------------------------------------------------------
 # GLOBAL VARIABLES
@@ -70,14 +70,6 @@ def pre_perceptron():
     wx =  np.zeros((no_of_different_labels, 1))
     img(5, x_train)
     
-def print_arrays():
-    print(X.shape)
-    print(y.shape)
-    print(x_train.shape)
-    print(y_train.shape)
-    print(x_test.shape)
-    print(y_test.shape)
-
 def load_mnist(data_path = "./"):
     global X, y, x_train, x_test, y_train, y_test
     X    = np.loadtxt(data_path + "mnist_data.txt", delimiter = " ")
@@ -89,7 +81,6 @@ def load_mnist(data_path = "./"):
     
 def main(): 
     load_mnist()
-    #print_arrays()
     pre_perceptron()
     perceptron()
     test_perceptron()
