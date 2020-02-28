@@ -19,6 +19,8 @@ no_of_different_labels = 10
 image_pixels = image_size * image_size
 X = y = x_train = x_test = y_train = y_test = w = wx = np.empty(0)
 y_predicted = accuracy = 0
+training_accuracy = test_accuracy = []
+epoch = 500
 
 # -----------------------------------------------------------------------------
 # APIs
@@ -44,7 +46,7 @@ def calculate_wx(x):
     
 def test_perceptron(x, y):
     global w, wx, y_predicted, accuracy
-    for i in range(len(x_test)):
+    for i in range(len(x)):
         y_predicted = calculate_wx(x[i])
         y_actual    = int(y[i])
         if (y_predicted == y_actual):
@@ -57,9 +59,7 @@ def perceptron():
     for i in range(len(x_train)):
         y_predicted = calculate_wx(x_train[i])
         y_actual    = int(y_train[i])
-        if (y_predicted == y_actual):
-            print("no change")
-        else:
+        if (y_predicted != y_actual):
             w[y_predicted] = w[y_predicted] - x_train[i] 
             w[y_actual]    = w[y_actual]    + x_train[i]
 
@@ -67,10 +67,8 @@ def init():
     global w, x_train, wx, no_of_different_labels, x_test
     x_train = np.append(x_train, np.ones([len(x_train),1]),1)
     x_test  = np.append(x_test, np.ones([len(x_test),1]),1)
-    a, b = x_train.shape
     w = np.zeros((no_of_different_labels, x_train.shape[1]))
     wx =  np.zeros((no_of_different_labels, 1))
-    img(5, x_train)
     
 def load_mnist(data_path = "./"):
     global X, y, x_train, x_test, y_train, y_test
@@ -85,17 +83,12 @@ def main():
     global y_test, y_train
     load_mnist()
     init()
-    perceptron()
+    for i in range(epoch):
+        perceptron()
     test_perceptron(x_train, y_train)
     test_perceptron(x_test, y_test)
 
 if __name__ == "__main__":
     main()
 
-# -----------------------------------------------------------------------------
-# OUTPUT:     
-
-# Accuracy is:  0.8242
-# Accuracy is:  0.8114
-    
 # -----------------------------------------------------------------------------
